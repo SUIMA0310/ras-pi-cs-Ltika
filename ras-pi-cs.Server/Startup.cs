@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -16,6 +17,8 @@ namespace ras_pi_cs.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSignalR();
 
             services.AddResponseCompression(options =>
             {
@@ -36,6 +39,11 @@ namespace ras_pi_cs.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSignalR(routes =>
+            {
+                // TODO
+            });
 
             app.UseMvc(routes =>
             {
