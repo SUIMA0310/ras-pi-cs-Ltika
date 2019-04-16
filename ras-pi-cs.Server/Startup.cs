@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
+using ras_pi_cs.Server.Hubs;
 
 namespace ras_pi_cs.Server
 {
@@ -42,7 +43,7 @@ namespace ras_pi_cs.Server
 
             app.UseSignalR(routes =>
             {
-                // TODO
+                routes.MapRoute<LedHub>("/Hub");
             });
 
             app.UseMvc(routes =>
