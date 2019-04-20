@@ -10,55 +10,37 @@ namespace ras_pi_cs.Server.Hubs
     public class LedHub : Hub
     {
         private readonly GpioController controller;
-        private readonly GpioWatcher watcher;
 
         public LedHub()
         {
+            //Console.WriteLine($"{DateTime.Now} : LedHub._ctr");
+
             var pin = new PinConfigration(14, true)
             {
                 AutoClose = false
             };
             controller = new GpioController(pin);
-            watcher = new GpioWatcher(pin);
-
-            watcher.ValueChanged += async () => 
-            {
-                var value = await Task.Run(() =>
-                {
-                    return controller.Value;
-                });
-                var status = new LedStatus()
-                {
-                    Value = value
-                };
-                await Clients.All.SendAsync("ChangeLedStatus", status);
-            };
         }
 
-        public async Task<LedStatus> GetLedStatus()
+        public LedStatus GetLedStatus()
         {
-            var value = await Task.Run(() =>
-            {
-                return controller.Value;
-            });
+            Console.WriteLine($"{DateTime.Now} : GetLedStatus");
             return new LedStatus()
             {
-                Value = value
+                Value = controller.Value
             };
         }
 
-        public async Task SetLedStatus(LedStatus status)
+        public void SetLedStatus(LedStatus status)
         {
-            await Task.Run(() => 
-            {
-                controller.Value = status.Value;
-            });
+            Console.WriteLine($"{DateTime.Now} : SetLedStatus");
+            controller.Value = status.Value;
         }
 
         protected override void Dispose(bool disposing)
         {
+            //Console.WriteLine($"{DateTime.Now} : Dispose");
             ((IDisposable)controller).Dispose();
-            watcher.Dispose();
             base.Dispose(disposing);
         }
     }

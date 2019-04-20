@@ -22,6 +22,7 @@ namespace ras_pi_cs.Gpio
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += (o, e) => 
             {
+                Console.WriteLine($"{DateTime.Now} : watcher :{e.Name}");
                 switch (e.Name)
                 {
                     case "value":
@@ -33,6 +34,7 @@ namespace ras_pi_cs.Gpio
                 }
             };
 
+            watcher.EnableRaisingEvents = true;
         }
 
         protected virtual void OnValueChanged()
