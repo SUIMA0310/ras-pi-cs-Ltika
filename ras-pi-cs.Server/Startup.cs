@@ -43,7 +43,7 @@ namespace ras_pi_cs.Server
 
             app.UseSignalR(routes =>
             {
-                routes.MapRoute<LedHub>("/Hub");
+                routes.MapHub<LedHub>("/LedHub");
             });
 
             app.UseMvc(routes =>
