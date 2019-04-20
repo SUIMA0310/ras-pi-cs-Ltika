@@ -38,7 +38,7 @@ namespace ras_pi_cs.Gpio
 
                 using (var writer = new StreamWriter(GetPinPath(config.PinNumber) + "value"))
                 {
-                    writer.WriteLine(value ? 1 : 0);
+                    writer.Write(value ? 1 : 0);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace ras_pi_cs.Gpio
             protected set {
                 using (var writer = new StreamWriter(GetPinPath(config.PinNumber)+ "direction"))
                 {
-                    writer.WriteLine(value ? "out" : "in");
+                    writer.Write(value ? "out" : "in");
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace ras_pi_cs.Gpio
         {
             using (var writer = new StreamWriter(GPIO + "export"))
             {
-                writer.WriteLine(config.PinNumber);
+                writer.Write(config.PinNumber);
             }
         }
 
@@ -82,7 +82,7 @@ namespace ras_pi_cs.Gpio
         {
             using (var writer = new StreamWriter(GPIO + "unexport"))
             {
-                writer.WriteLine(config.PinNumber);
+                writer.Write(config.PinNumber);
             }
         }
 
