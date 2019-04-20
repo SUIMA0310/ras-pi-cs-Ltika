@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ras-pi-cs.Client\ras-pi-cs.Client.csproj" />
+    <ProjectReference Include="..\ras-pi-cs.Gpio\ras-pi-cs.Gpio.csproj" />
     <ProjectReference Include="..\ras-pi-cs.Shared\ras-pi-cs.Shared.csproj" />
   </ItemGroup>
 
