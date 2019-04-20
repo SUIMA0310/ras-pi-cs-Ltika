@@ -29,6 +29,7 @@ LED is @LedStatusMessage
         Connection.On<LedStatus>("ChangeLedStatus", status =>
         {
             LedStatusMessage = status.Value ? "ON" : "OFF";
+            StateHasChanged();
             return Task.CompletedTask;
         });
 
