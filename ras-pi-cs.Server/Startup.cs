@@ -21,6 +21,8 @@ namespace ras_pi_cs.Server
 
             services.AddSignalR();
 
+            services.AddHostedService<Searvice>();
+
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]

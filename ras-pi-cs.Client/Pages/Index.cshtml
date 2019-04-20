@@ -17,18 +17,22 @@ LED is @LedStatusMessage
 
     protected override async Task OnInitAsync()
     {
+        Console.WriteLine($"{DateTime.Now} :OnInitAsync");
+
         Connection = new HubConnectionBuilder()
-            .WithUrl("/LedHub",
-            opt =>
-            {
-                opt.LogLevel = SignalRLogLevel.Debug;
-                opt.Transport = HttpTransportType.WebSockets;
-            })
-            .Build();
+        .WithUrl("/LedHub",
+        opt =>
+        {
+            opt.LogLevel = SignalRLogLevel.Trace;
+            opt.Transport = HttpTransportType.WebSockets;
+        })
+        .Build();
 
         Connection.On<LedStatus>("ChangeLedStatus", status =>
         {
+            Console.WriteLine($"{DateTime.Now} : On ChangeLedStatus");
             LedStatusMessage = status.Value ? "ON" : "OFF";
+            StateHasChanged();
             return Task.CompletedTask;
         });
 
@@ -40,11 +44,13 @@ LED is @LedStatusMessage
 
     async Task LED_ON()
     {
+        Console.WriteLine($"{DateTime.Now} :LED_ON");
         await Connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
     }
 
     async Task LED_OFF()
     {
-        await Connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
+        Console.WriteLine($"{DateTime.Now} :LED_OFF");
+        await Connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = false });
     }
 }

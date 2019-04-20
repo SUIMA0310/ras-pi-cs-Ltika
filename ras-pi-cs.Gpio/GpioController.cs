@@ -28,7 +28,9 @@ namespace ras_pi_cs.Gpio
             get {
                 using (var reader = new StreamReader(GetPinPath(config.PinNumber) + "value"))
                 {
-                    return reader.ReadToEnd() == "1";
+                    var value = reader.ReadToEnd().IndexOf("1") != -1;
+                    Console.WriteLine($"{DateTime.Now}  : Read Value > {value}");
+                    return value;
                 }
             }
             set {
@@ -38,6 +40,7 @@ namespace ras_pi_cs.Gpio
                     throw new NotSupportedException();
                 }
 
+                Console.WriteLine($"{DateTime.Now}  : write {GetPinPath(config.PinNumber) + "value"} / {(value?1:0)}");
                 using (var writer = new StreamWriter(GetPinPath(config.PinNumber) + "value"))
                 {
                     writer.Write(value ? 1 : 0);
@@ -54,7 +57,7 @@ namespace ras_pi_cs.Gpio
             get {
                 using (var reader = new StreamReader(GetPinPath(config.PinNumber) + "direction"))
                 {
-                    return reader.ReadToEnd() == "out";
+                    return reader.ReadToEnd().IndexOf("out") != -1;
                 }
             }
             protected set {
