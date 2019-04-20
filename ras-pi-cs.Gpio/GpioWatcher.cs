@@ -25,8 +25,10 @@ namespace ras_pi_cs.Gpio
                 switch (e.Name)
                 {
                     case "value":
+                        OnValueChanged();
                         break;
                     case "direction":
+                        OnDirectionChanged();
                         break;
                 }
             };
