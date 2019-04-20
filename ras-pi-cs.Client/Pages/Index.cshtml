@@ -2,15 +2,22 @@
 @using ras_pi_cs.Shared;
 @page "/"
 
-<h1>Hello, world!</h1>
+<h1>Hello, CSharp!</h1>
 
-Welcome to your new app.
+LED is @LedStatusMessage
+
+<button onclick="@LED_ON">ON</button>
+<button onclick="@LED_OFF">OFF</button>
 
 @functions
 {
+    private HubConnection Connection;
+
+    private string LedStatusMessage;
+
     protected override async Task OnInitAsync()
     {
-        var connection = new HubConnectionBuilder()
+        Connection = new HubConnectionBuilder()
             .WithUrl("/LedHub",
             opt =>
             {
@@ -19,14 +26,25 @@ Welcome to your new app.
             })
             .Build();
 
-        connection.On<LedStatus>("ChangeLedStatus", async status =>
+        Connection.On<LedStatus>("ChangeLedStatus", status =>
         {
-            Console.WriteLine($"On Change Led Status. :{status.Value}");
-            await Task.CompletedTask;
+            LedStatusMessage = status.Value ? "ON" : "OFF";
+            return Task.CompletedTask;
         });
 
-        await connection.StartAsync();
+        await Connection.StartAsync();
 
-        await connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
+        var ledStatus = await Connection.InvokeAsync<LedStatus>("GetLedStatus");
+        LedStatusMessage = ledStatus.Value ? "ON" : "OFF";
+    }
+
+    async Task LED_ON()
+    {
+        await Connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
+    }
+
+    async Task LED_OFF()
+    {
+        await Connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
     }
 }
