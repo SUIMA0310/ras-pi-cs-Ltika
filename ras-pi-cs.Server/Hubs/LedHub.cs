@@ -14,7 +14,10 @@ namespace ras_pi_cs.Server.Hubs
 
         public LedHub()
         {
-            var pin = new PinConfigration(14, true);
+            var pin = new PinConfigration(14, true)
+            {
+                AutoClose = false
+            };
             controller = new GpioController(pin);
             watcher = new GpioWatcher(pin);
 

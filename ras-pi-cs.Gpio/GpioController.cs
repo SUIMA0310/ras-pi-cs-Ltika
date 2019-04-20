@@ -14,6 +14,8 @@ namespace ras_pi_cs.Gpio
         public GpioController(PinConfigration pinConfigration)
         {
             config = pinConfigration;
+
+            Open();
             Direction = config.Output;
         }
 
@@ -56,7 +58,7 @@ namespace ras_pi_cs.Gpio
                 }
             }
             protected set {
-                using (var writer = new StreamWriter(GetPinPath(config.PinNumber)+ "direction"))
+                using (var writer = new StreamWriter(GetPinPath(config.PinNumber) + "direction"))
                 {
                     writer.Write(value ? "out" : "in");
                 }
@@ -72,18 +74,38 @@ namespace ras_pi_cs.Gpio
 
         public void Open()
         {
-            using (var writer = new StreamWriter(GPIO + "export"))
+            if (IsOpen)
             {
-                writer.Write(config.PinNumber);
+                return;
             }
+
+            try
+            {
+                using (var writer = new StreamWriter(GPIO + "export"))
+                {
+                    writer.Write(config.PinNumber);
+                }
+            }
+            catch
+            { }
         }
 
         public void Close()
         {
-            using (var writer = new StreamWriter(GPIO + "unexport"))
+            if (!IsOpen)
             {
-                writer.Write(config.PinNumber);
+                return;
             }
+
+            try
+            {
+                using (var writer = new StreamWriter(GPIO + "unexport"))
+                {
+                    writer.Write(config.PinNumber);
+                }
+            }
+            catch
+            { }
         }
 
         protected string GetPinPath(int pinNumber)
@@ -93,7 +115,10 @@ namespace ras_pi_cs.Gpio
 
         void IDisposable.Dispose()
         {
-            Close();
+            if (config.AutoClose)
+            {
+                Close();
+            }
         }
     }
 }
