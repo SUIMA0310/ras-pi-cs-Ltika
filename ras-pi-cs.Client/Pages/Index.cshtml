@@ -21,7 +21,7 @@ LED is @LedStatusMessage
             .WithUrl("/LedHub",
             opt =>
             {
-                opt.LogLevel = SignalRLogLevel.Debug;
+                opt.LogLevel = SignalRLogLevel.Trace;
                 opt.Transport = HttpTransportType.WebSockets;
             })
             .Build();

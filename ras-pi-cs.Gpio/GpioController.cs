@@ -54,7 +54,7 @@ namespace ras_pi_cs.Gpio
             get {
                 using (var reader = new StreamReader(GetPinPath(config.PinNumber) + "direction"))
                 {
-                    return reader.ReadToEnd() == "out";
+                    return reader.ReadToEnd().IndexOf("out") != -1;
                 }
             }
             protected set {
