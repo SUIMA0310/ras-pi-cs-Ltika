@@ -12,6 +12,8 @@ namespace ras_pi_cs.Gpio
         // true is out.
         // false is in.
         public bool Output { get; set; } = false;
+        public bool AutoClose { get; set; } = true;
+
 
         public PinConfigration()
         { }
