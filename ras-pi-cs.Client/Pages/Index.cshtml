@@ -1,7 +1,32 @@
-﻿@page "/"
+﻿@using Blazor.Extensions;
+@using ras_pi_cs.Shared;
+@page "/"
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@functions
+{
+    protected override async Task OnInitAsync()
+    {
+        var connection = new HubConnectionBuilder()
+            .WithUrl("/LedHub",
+            opt =>
+            {
+                opt.LogLevel = SignalRLogLevel.Debug;
+                opt.Transport = HttpTransportType.WebSockets;
+            })
+            .Build();
+
+        connection.On<LedStatus>("ChangeLedStatus", async status =>
+        {
+            Console.WriteLine($"On Change Led Status. :{status.Value}");
+            await Task.CompletedTask;
+        });
+
+        await connection.StartAsync();
+
+        await connection.InvokeAsync("SetLedStatus", new LedStatus() { Value = true });
+    }
+}
